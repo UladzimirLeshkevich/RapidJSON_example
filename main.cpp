@@ -6,14 +6,40 @@
 #include <fstream>
 #include <iostream>
 
+//define all rapidjson types
+//http://rapidjson.org/namespacerapidjson.html#ae79a4751c1c460ff0de5ecc07874f3e4
+#define JSON_NULL 0
+#define JSON_FALSE 1
+#define JSON_TRUE 2
+#define JSON_OBJECT 3
+#define JSON_ARRAY 4
+#define JSON_STRING 5
+#define JSON_NUMBER 6
+
+static const char *kTypeNames[] = {
+    "Null",   // 0
+    "False",  // 1
+    "True",   // 2
+    "Object", // 3
+    "Array",  // 4
+    "String", // 5
+    "Number"  // 6
+};
+
 using namespace rapidjson;
 
+void print_json_object(const Value::Member &input);
+void print_json_array(const Value::Member &input);
+void print_json_string(const Value::Member &input);
+void print_string(const Value::Member &input);
+void parse_json_type(const Value::Member &input);
+
+//=============================== MAIN ====================================================
 int main()
 {
     std::string file = "D:\\test2.json";
     std::string string_from_file("empty");
     std::string string_;
-    std::string hello_keyword_value;
 
     std::ifstream input_file(file);
     if (!input_file)
@@ -23,65 +49,95 @@ int main()
         return EXIT_FAILURE;
     }
 
-    std::cout << string_from_file << std::endl;
     while (getline(input_file, string_from_file))
     {
         string_ = string_ + string_from_file;
         //std::cout << string_ << std::endl;
     }
 
-    std::cout << string_ << std::endl;
-    std::cout << "======================================================================================" << std::endl;
+    //std::cout << string_ << std::endl;// result string from json file
+    //std::cout << "======================================================================================" << std::endl;
 
-    //const char *json = "{\"project\":\"rapidjson\",\"stars\":10}";
     Document dom;
     dom.Parse(string_.data()); //
 
-    static const char *kTypeNames[] =
-        {"Null", "False", "True", "Object", "Array", "String", "Number"};
-
-    // object m == pair 'name : value'
+    // object &m == pair 'name : value'
     for (auto &m : dom.GetObject())
     {
-        // name : value !!!
-        std::cout << m.name.GetString()
-                  << " : " << kTypeNames[m.value.GetType()] << std::endl;
-        if (m.value.GetType() == 5) //string
-        {
-            std::cout << "String is : '" << m.value.GetString() << "'" << std::endl;
-            std::cout << "===========" << std::endl;
-        }
-        if (m.value.GetType() == 3) //object
-        {
-            std::cout << "Object is : " << std::endl;
-            for (auto &obj : m.value.GetObject())
-            {
-                std::cout << obj.name.GetString()
-                          << " : " << kTypeNames[obj.value.GetType()] << std::endl;
-            }
-            std::cout << "===========" << std::endl;
-        }
-        if (m.value.GetType() == 4) //array
-        {
-            std::cout << "Array is : " << std::endl;
-            for (auto &arr : m.value.GetArray())
-            {
-                for (auto &arr_obj : arr.GetObject())
-                {
+        std::cout << "(" << m.name.GetString()
+                  << " : " << kTypeNames[m.value.GetType()] << ")" << std::endl;
+        parse_json_type(m);
+    }
+    return 0;
+}
 
-                    std::cout << arr_obj.name.GetString()
-                              << " : " << kTypeNames[arr_obj.value.GetType()] << std::endl;
-                }
-            }
-            std::cout << "===========" << std::endl;
+//========================================================================================
+void print_json_object(const Value::Member &input)
+{
+    std::cout << "Object is : " << std::endl;
+    for (auto &obj : input.value.GetObject())
+    {
+        std::cout << "   " << obj.name.GetString()
+                  << " : " << kTypeNames[obj.value.GetType()] << std::endl;
+    }
+    std::cout << "======================" << std::endl;
+}
+
+//========================================================================================
+void print_json_array(const Value::Member &input)
+{
+    std::cout << "Array is : " << std::endl;
+    for (auto &arr : input.value.GetArray())
+    {
+        for (auto &arr_obj : arr.GetObject())
+        {
+            std::cout << "   " << arr_obj.name.GetString()
+                      << " : " << kTypeNames[arr_obj.value.GetType()] << std::endl;
         }
     }
+    std::cout << "======================" << std::endl;
+}
 
-    //    assert(my_d.HasMember("hello"));
-    //    assert(my_d["hello"].IsString());
-    //    std::cout << my_d["hello"].GetString() << std::endl;
-    //    hello_keyword_value = my_d["hello"].GetString();
-    //    std::cout << "hello_keyword_value = " << hello_keyword_value << std::endl;
+//========================================================================================
+void print_json_string(const Value::Member &input)
+{
+    //std::cout << "String is : '" << input.value.GetString() << "'" << std::endl;
+    std::cout << "String is : ";
+    print_string(input);
+    std::cout << "======================" << std::endl;
+}
 
-    return 0;
+//========================================================================================
+void print_string(const Value::Member &input)
+{
+    std::cout << "'" << input.value.GetString() << "'" << std::endl;
+    //std::cout << "======================" << std::endl;
+}
+
+//========================================================================================
+void parse_json_type(const Value::Member &input)
+{
+    switch (input.value.GetType())
+    {
+    case JSON_NULL:
+        break;
+    case JSON_FALSE:
+        break;
+    case JSON_TRUE:
+        break;
+    case JSON_OBJECT:
+        print_json_object(input);
+        break;
+    case JSON_ARRAY:
+        print_json_array(input);
+        break;
+    case JSON_STRING:
+        print_json_string(input);
+        break;
+    case JSON_NUMBER:
+        break;
+    default:
+        std::cerr << " INVALID RAPIDJSON TYPE !!!" << std::endl;
+    }
+    return;
 }
