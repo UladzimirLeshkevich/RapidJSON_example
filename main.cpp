@@ -7,7 +7,6 @@
 #include <iostream>
 
 //define all rapidjson types
-//http://rapidjson.org/namespacerapidjson.html#ae79a4751c1c460ff0de5ecc07874f3e4
 #define JSON_NULL 0
 #define JSON_FALSE 1
 #define JSON_TRUE 2
@@ -33,6 +32,7 @@ void parse_json_array(const Value::Member &input);
 void parse_json_string(const Value::Member &input);
 void print_string(const Value::Member &input);
 void parse_json_type(const Value::Member &input);
+void parse_json_number(const Value::Member &input);
 
 //=============================== MAIN ====================================================
 int main()
@@ -49,6 +49,8 @@ int main()
                   << "\n";
         return EXIT_FAILURE;
     }
+
+    //SkipWhitespace(input_file); //
 
     while (getline(input_file, string_from_file))
     {
@@ -123,10 +125,13 @@ void parse_json_type(const Value::Member &input)
     switch (input.value.GetType())
     {
     case JSON_NULL:
+        std::cout << "NULL" << std::endl; //
         break;
     case JSON_FALSE:
+        std::cout << "false" << std::endl; //
         break;
     case JSON_TRUE:
+        std::cout << "true" << std::endl; //
         break;
     case JSON_OBJECT:
         parse_json_object(input);
@@ -138,10 +143,26 @@ void parse_json_type(const Value::Member &input)
         parse_json_string(input);
         break;
     case JSON_NUMBER:
+        parse_json_number(input);
         break;
     default:
         std::cerr << " INVALID RAPIDJSON TYPE !!!" << std::endl;
         return;
     }
     return;
+}
+
+//========================================================================================
+void parse_json_number(const Value::Member &input)
+{
+    std::cout << "Number is : ";
+    if (input.value.IsInt())
+    {
+        std::cout << input.value.GetInt() << std::endl;
+    }
+    else
+    {
+        std::cout << input.value.GetDouble() << std::endl;
+    }
+    std::cout << "======================" << std::endl;
 }
