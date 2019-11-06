@@ -37,7 +37,8 @@ void parse_json_type(const Value::Member &input);
 //=============================== MAIN ====================================================
 int main()
 {
-    std::string file = "D:\\test2.json";
+    //std::string file = "D:\\test2.json";
+    std::string file = "test.json";
     std::string string_from_file("empty");
     std::string string_;
 
@@ -140,6 +141,7 @@ void parse_json_type(const Value::Member &input)
         break;
     default:
         std::cerr << " INVALID RAPIDJSON TYPE !!!" << std::endl;
+        return;
     }
     return;
 }
