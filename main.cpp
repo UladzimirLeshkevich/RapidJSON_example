@@ -28,14 +28,11 @@ static const char *kTypeNames[] = {
 
 using namespace rapidjson;
 
-void print_json_object(const Value::Member &input);
-void print_json_array(const Value::Member &input);
-void print_json_string(const Value::Member &input);
+void parse_json_object(const Value::Member &input);
+void parse_json_array(const Value::Member &input);
+void parse_json_string(const Value::Member &input);
 void print_string(const Value::Member &input);
-//void print_json_type(const Value::Member &input);
 void parse_json_type(const Value::Member &input);
-
-//void parse_json_object(const Value::Member &input);
 
 //=============================== MAIN ====================================================
 int main()
@@ -75,7 +72,7 @@ int main()
 }
 
 //========================================================================================
-void print_json_object(const Value::Member &input)
+void parse_json_object(const Value::Member &input)
 {
     std::cout << "Object is : " << std::endl;
     for (auto &obj : input.value.GetObject())
@@ -88,7 +85,7 @@ void print_json_object(const Value::Member &input)
 }
 
 //========================================================================================
-void print_json_array(const Value::Member &input)
+void parse_json_array(const Value::Member &input)
 {
     std::cout << "Array is : " << std::endl;
     for (auto &arr : input.value.GetArray())
@@ -104,7 +101,7 @@ void print_json_array(const Value::Member &input)
 }
 
 //========================================================================================
-void print_json_string(const Value::Member &input)
+void parse_json_string(const Value::Member &input)
 {
     //std::cout << "String is : '" << input.value.GetString() << "'" << std::endl;
     std::cout << "String is : ";
@@ -131,13 +128,13 @@ void parse_json_type(const Value::Member &input)
     case JSON_TRUE:
         break;
     case JSON_OBJECT:
-        print_json_object(input);
+        parse_json_object(input);
         break;
     case JSON_ARRAY:
-        print_json_array(input);
+        parse_json_array(input);
         break;
     case JSON_STRING:
-        print_json_string(input);
+        parse_json_string(input);
         break;
     case JSON_NUMBER:
         break;
