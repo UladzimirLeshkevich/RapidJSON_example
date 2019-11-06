@@ -1,0 +1,82 @@
+{
+    "type": "procedure",
+    "condition": {
+        "type": "dtmf",
+        "dtmf_key": 1,
+        "dtmf_timeout": 4
+    },
+    "items": [
+        {
+            "type": "action",
+            "action": "fax",
+            "attributes": {
+                "email": "test@test.com" 
+            }
+        },
+        {
+            "type": "procedure",
+            "attributes": {
+                "pass_disable": "false",
+                "pass_len": 3,
+                "password_failed_count": 5,
+                "passwords": [
+                    {
+                        "value": "986",
+                        "description": "Пример пароля 1" 
+                    },
+                    {
+                        "value": "478",
+                        "description": "Пример пароля 2" 
+                    }
+                ]
+            },
+            "schedule": {
+                "from": "2019-10-07T00:00:00",
+                "to": "2019-10-27T23:59:59",
+                "rules": [
+                    {
+                        "day": "all",
+                        "from": "10:00:00",
+                        "to": "15:00:00" 
+                    }
+                ]
+            },
+            "condition": {
+                "type": "dtmf",
+                "dtmf_key": 1,
+                "dtmf_timeout": 4
+            },
+            "items": [
+                {
+                    "type": "action",
+                    "action": "say",
+                    "attributes": {
+                        "text": "Здравствуйте, Иван Иванович!",
+                        "settings": {
+                            "lang": "ru-RU",
+                            "voice": "alyss" 
+                        }
+                    }
+                },
+                {
+                    "type": "action",
+                    "action": "say",
+                    "attributes": {
+                        "text": "На вашем счету задолженность!",
+                        "settings": {
+                            "lang": "ru-RU",
+                            "voice": "alyss" 
+                        }
+                    }
+                },
+                {
+                    "type": "action",
+                    "action": "fax",
+                    "attributes": {
+                        "email": "test@test.com" 
+                    }
+                }
+            ]
+        }
+    ]
+}
