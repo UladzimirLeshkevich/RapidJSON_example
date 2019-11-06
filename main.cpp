@@ -32,7 +32,9 @@ void print_json_object(const Value::Member &input);
 void print_json_array(const Value::Member &input);
 void print_json_string(const Value::Member &input);
 void print_string(const Value::Member &input);
-void parse_json_type(const Value::Member &input);
+void print_json_type(const Value::Member &input);
+
+void parse_json_object(const Value::Member &input);
 
 //=============================== MAIN ====================================================
 int main()
@@ -66,7 +68,7 @@ int main()
     {
         std::cout << "(" << m.name.GetString()
                   << " : " << kTypeNames[m.value.GetType()] << ")" << std::endl;
-        parse_json_type(m);
+        print_json_type(m);
     }
     return 0;
 }
@@ -91,8 +93,11 @@ void print_json_array(const Value::Member &input)
     {
         for (auto &arr_obj : arr.GetObject())
         {
-            std::cout << "   " << arr_obj.name.GetString()
-                      << " : " << kTypeNames[arr_obj.value.GetType()] << std::endl;
+
+            print_json_type(arr_obj); //
+
+            //            std::cout << "   " << arr_obj.name.GetString()
+            //                      << " : " << kTypeNames[arr_obj.value.GetType()] << std::endl;
         }
     }
     std::cout << "======================" << std::endl;
@@ -115,7 +120,7 @@ void print_string(const Value::Member &input)
 }
 
 //========================================================================================
-void parse_json_type(const Value::Member &input)
+void print_json_type(const Value::Member &input)
 {
     switch (input.value.GetType())
     {
@@ -126,6 +131,36 @@ void parse_json_type(const Value::Member &input)
     case JSON_TRUE:
         break;
     case JSON_OBJECT:
+        print_json_object(input);
+        //parse_json_object(input);
+        break;
+    case JSON_ARRAY:
+        print_json_array(input);
+        break;
+    case JSON_STRING:
+        print_json_string(input);
+        break;
+    case JSON_NUMBER:
+        break;
+    default:
+        std::cerr << " INVALID RAPIDJSON TYPE !!!" << std::endl;
+    }
+    return;
+}
+
+//========================================================================================
+void parse_json_object(const Value::Member &input)
+{
+    switch (input.value.GetType())
+    {
+    case JSON_NULL:
+        break;
+    case JSON_FALSE:
+        break;
+    case JSON_TRUE:
+        break;
+    case JSON_OBJECT:
+        //parse_json_object(input);
         print_json_object(input);
         break;
     case JSON_ARRAY:
