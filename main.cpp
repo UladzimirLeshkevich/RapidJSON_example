@@ -26,7 +26,7 @@ int main()
     while (getline(input_file, string_from_file))
     {
         string_ = string_ + string_from_file;
-        std::cout << string_ << std::endl;
+        //std::cout << string_ << std::endl;
     }
 
     std::cout << string_ << std::endl;
