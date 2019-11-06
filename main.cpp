@@ -94,10 +94,10 @@ void print_json_array(const Value::Member &input)
         for (auto &arr_obj : arr.GetObject())
         {
 
-            print_json_type(arr_obj); //
+            //print_json_type(arr_obj); //
 
-            //            std::cout << "   " << arr_obj.name.GetString()
-            //                      << " : " << kTypeNames[arr_obj.value.GetType()] << std::endl;
+            std::cout << "   " << arr_obj.name.GetString()
+                      << " : " << kTypeNames[arr_obj.value.GetType()] << std::endl;
         }
     }
     std::cout << "======================" << std::endl;
