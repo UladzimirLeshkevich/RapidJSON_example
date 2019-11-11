@@ -5,6 +5,7 @@
 #include "include/rapidjson/writer.h"
 #include <fstream>
 #include <iostream>
+#include <string>
 
 //define all rapidjson types
 #define JSON_NULL 0
@@ -61,18 +62,28 @@ int main()
     //std::cout << string_ << std::endl;// result string from json file
     //std::cout << "======================================================================================" << std::endl;
 
-    Document dom;
-    dom.Parse(string_.data()); //
+    rapidjson::Document doc;
+    doc.Parse(string_.data()); //
 
-    // object &m == pair 'name : value'
-    for (auto &m : dom.GetObject())
+    std::cout << doc["type"].GetString() << std::endl;
+    const auto &obj = doc["condition"].GetObject();
+    std::cout << obj["type"].GetString() << std::endl; // !!
+
+    const auto &arr = doc["items"].GetArray();
+
+    //const rapidjson::GenericArray::GenericValue::MemoryPoolAllocator::Allocator arr2(doc["items"].GetArray());
+
+    std::cout << typeid(arr).name() << std::endl; // !!
+
+    std::cout << "================== for() =========================" << std::endl;
+    //=============================================================
+    for (auto &object : doc.GetObject())
     {
-        std::cout << "(" << m.name.GetString()
-                  << " : " << kTypeNames[m.value.GetType()] << ")" << std::endl;
-        parse_json_type(m);
+        std::cout << "(" << object.name.GetString() << " : " << kTypeNames[object.value.GetType()] << ")" << std::endl;
     }
-    return 0;
-}
+    std::cout << "================================================" << std::endl;
+
+} //main
 
 //========================================================================================
 void parse_json_object(const Value::Member &input)
